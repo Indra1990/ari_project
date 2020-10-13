@@ -37,4 +37,14 @@ class SubClass extends Model
             return true;
         });
     }
+
+    public function class_belong()
+    {
+        return $this->belongsTo('App\Models\Classes','idclass');
+    }
+
+    public function materies()
+    {
+        return $this->hasMany('App\Models\Materies','idsubclass');
+    }
 }

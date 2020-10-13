@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Classes;
 use App\Models\SubClass;
+use App\Models\Materies;
+use Illuminate\Support\Str;
+
 class ClassController extends Controller
 {
     public function index()
@@ -113,7 +116,7 @@ class ClassController extends Controller
     {
         $heads = $request->headmateri;
         for ($i=0; $i < count($heads); $i++) { 
-            if ($heads[$i] == NULL) {
+            if ($heads[$i] == NULL || $heads[$i] == 0) {
                 return redirect()->back()->with('status_error', 'Add Sub Class Not Empty');
             }
         }
@@ -126,5 +129,69 @@ class ClassController extends Controller
         }
 
         return redirect('class/detail/'.$class->idclass);
+    }
+
+    public function addmateries(Classes $class, Request $request)
+    {
+        // validate required not null
+        if (empty($request->name_materies)) {
+            return redirect()->back()->with('status_error', 'name materies is required ');
+        }
+        // validate extension 
+        for ($i=0; $i < count($request->video_480); $i++) {
+            if($request->video_480[$i]->getClientOriginalExtension() != 'mp4'){
+                return redirect()->back()->with('status_error', 'Video 480 Extension must MP4');
+            }
+            if($request->video_720[$i]->getClientOriginalExtension() != 'mp4'){
+                return redirect()->back()->with('status_error', 'Video 720 Extension must MP4');
+            }
+            if (empty($request->video_480[$i]) || empty($request->video_720[$i])   ) {
+                return redirect()->back()->with('status_error', 'Video 480 and 720 is required');
+            }
+        }
+
+        for ($i=0; $i < count($request->name_materies) ; $i++) { 
+
+            $name_480 = Str::random(20)."_".$request->file('video_480')[$i]->getClientOriginalName();
+            $path_480 = env('CDN_PATH').'/class/video480/'; 
+            $request->file('video_480')[$i]->move($path_480, $name_480);
+
+            $name_720 = Str::random(20)."_".$request->file('video_720')[$i]->getClientOriginalName();
+            $path_720 = env('CDN_PATH').'/class/video720/'; 
+            $request->file('video_720')[$i]->move($path_720, $name_720);
+
+            $save_materies = new Materies;
+            $save_materies->idsubclass = $request->add_idsubclass;
+            $save_materies->name_materi = $request->name_materies[$i];
+            $save_materies->video480 = $name_480;
+            $save_materies->video720 = $name_720;
+            $save_materies->save();
+        }
+
+        return redirect('class/detail/'.$class->idclass)->with('status_success','Successfuly Add Materies');
+    }
+
+    public function viewmateries(Classes $class,SubClass $subcls)
+    {   
+        // $subclass = SubClass::find($subcls->idsubclass);
+        // $class = Classes::with([
+        //     'subclass' => function($sub){
+        //         $sub->where('idsubclass',$subclass->idsubclass);
+        //     }
+        // ])
+        // ->where('idclass',$class->idclass)
+        // ->first();
+        $subclass = SubClass::with([
+                        'class_belong',
+                        'materies'
+                    ])
+                    ->where('idsubclass',$subcls->idsubclass)
+                    ->first();
+
+
+
+        return response()->json(array('subclass'=> $subclass), 200);
+
+
     }
 }

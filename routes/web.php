@@ -29,3 +29,6 @@ Route::post('class/create-new', [ClassController::class, 'create_save'])->middle
 Route::get('class/detail/{class}', [ClassController::class, 'class_detail'])->middleware('check.auth');
 // subclass
 Route::post('class/detail/{class}/create-subclass', [ClassController::class, 'addsubclass'])->middleware('check.auth');
+// materies
+Route::post('class/detail/{class}/create-materies', [ClassController::class, 'addmateries'])->middleware('check.auth');
+Route::get('class/detail/{class}/view-materies/{subcls}', [ClassController::class, 'viewmateries'])->middleware('check.auth');

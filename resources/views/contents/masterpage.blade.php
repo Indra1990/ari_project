@@ -170,6 +170,7 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
+ 
     {!! $pagecontent !!}
   <!-- /.content-wrapper -->
   

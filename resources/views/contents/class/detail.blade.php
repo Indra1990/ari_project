@@ -24,6 +24,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+               @include('contents.allmessage')
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
@@ -100,6 +101,7 @@
                                             <td>{{ $sub->headmateri }}</td>
                                             <td>
                                                 <a class="open-mdl btn btn-xs btn-default" data-toggle="modal" data-target="#materies" data-id="{{ $sub->idsubclass }}" title="Add Materies"><i class="fas fa-plus"></i></a>
+                                                <a class="btn btn-xs btn-default" title="View Materies" onclick="view_materies({{ $class->idclass }},{{ $sub->idsubclass }})"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -161,7 +163,7 @@
   {{--  create modal materies  --}}
 <div class="modal fade" id="materies" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ url('class/detail/'.$class->idclass.'/create-materies') }}" role="form" method="post">
+        <form action="{{ url('class/detail/'.$class->idclass.'/create-materies') }}" enctype="multipart/form-data" role="form" method="post">
             @csrf
       <div class="modal-content">
         <div class="modal-header">
@@ -215,6 +217,9 @@
       </div>
     </div>
   </div>
+
+  {{--  modal view materies  --}}
+  @include('contents.class.materies.detail')
 
   <script>
         //delete create table subclass
@@ -275,15 +280,29 @@
                     +'</td>'
                 +'</tr>'
             );
-
-
         });
 
         $('.open-mdl').on('click',function(){
             var idsubclass = $(this).data('id');
             $('#add_idsubclass').val(idsubclass);
-            console.log(idsubclass)
-
         })
+
+        function view_materies(idclass,idsub){
+            $.ajax({
+                type: "GET",
+                url: "{{url('class/detail')}}/"+idclass+'/view-materies/'+idsub,
+                dataType: "json",
+                success: function (response) {
+                    $('#view-materies').modal('show');
+                    console.log(response);
+                    var content = '';
+                    $.each(response.subclass, function( index, value ) {
+                        content += '<tr>'+index+'<tr>' 
+                    });
+                    $('#tr-view-show').html(content)
+                }
+            });
+        }
+       
       
   </script>

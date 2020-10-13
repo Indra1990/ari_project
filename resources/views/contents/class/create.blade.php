@@ -32,7 +32,7 @@
         </div>  --}}
         <br>
 
-        <form action="{{ url('class/create-new') }}" role="form" method="post" action="" enctype="multipart/form-data">
+        <form action="{{ url('class/create-new') }}" role="form" method="post" enctype="multipart/form-data">
           @csrf
           <div class="row">
               <div class="col-12">

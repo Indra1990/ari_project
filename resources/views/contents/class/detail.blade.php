@@ -296,8 +296,13 @@
                     $('#view-materies').modal('show');
                     console.log(response);
                     var content = '';
-                    $.each(response.subclass, function( index, value ) {
-                        content += '<tr>'+index+'<tr>' 
+                    $.each(response.subclass.materies, function( index, value ) {
+                        content +=  '<tr>'
+                                    +'<td>'+(index+1)+'</td>'
+                                    +'<td>'+value.name_materi+'</td>'
+                                    +'<td><iframe src="{{ env('ADMINLTE3')}}class/video480/'+value.video480+'" frameborder="0"></iframe> </td>'
+                                    +'<td><iframe src="{{ env('ADMINLTE3')}}class/video720/'+value.video720+'" frameborder="0"></iframe> </td>'
+                                    +'</tr>'
                     });
                     $('#tr-view-show').html(content)
                 }

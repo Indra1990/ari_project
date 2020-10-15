@@ -114,9 +114,10 @@ class ClassController extends Controller
 
     public function addsubclass(Classes $class, Request $request)
     {
+        // return $request->all();
         $heads = $request->headmateri;
         for ($i=0; $i < count($heads); $i++) { 
-            if ($heads[$i] == NULL || $heads[$i] == 0) {
+            if (empty($heads[$i])) {
                 return redirect()->back()->with('status_error', 'Add Sub Class Not Empty');
             }
         }

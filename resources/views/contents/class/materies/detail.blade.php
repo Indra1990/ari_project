@@ -20,13 +20,13 @@
                           <th>Video 720</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tr-view-show">
                         {{--  <tr id="tr-view-show">
                            
                         </tr>  --}}
-                        <div id="tr-view-show">
+                        {{--  <div id="tr-view-show">
 
-                        </div>
+                        </div>  --}}
                     </tbody>
                 </table>
             </div>   

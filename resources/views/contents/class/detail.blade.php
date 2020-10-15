@@ -174,7 +174,7 @@
         </div>
         <div class="modal-body">
             <div class="form-group row">
-                <button type="button" id="addmateries" class="btn btn-default btn-sm">Add Materies</button>                
+                <button type="button" id="addmateries" class="btn btn-primary btn-sm">Add Materies</button>                
             </div>
             <div class="row">
                 <div class="col-12">
@@ -182,7 +182,6 @@
                             <table class="table" id="table_materies">
                                 <tbody>
                                     <tr>
-                                        <td width="2%">1</td>
                                         <td>
                                             <small><strong>Name</strong></small>
                                             <input type="hidden" id="add_idsubclass" name="add_idsubclass" >
@@ -234,6 +233,8 @@
             $(this).closest('tr').remove();
             var materis_num = $('#index_materies').val();
             $('#index_materies').val(parseInt(materis_num)-1);
+            $('#addmateries').attr('disabled',false);
+
         });
 
         $('#addsubclass').on('click', function(){
@@ -256,30 +257,32 @@
 
         $('#addmateries').on('click', function(){
             var materis = $('#index_materies').val();
-            $('#index_materies').val(parseInt(materis)+1);
-            $('#table_materies').append('<tr>'
-                    +'<td>'
-                        +materis
-                    +'</td>'
-                    +'<td>'
-                       +'<small><strong>Name</strong></small>'
-                        +'<input type="text" class="form-control" name="name_materies[]" id="name_materies_'+materis+'" placeholder="Name Materies" required>'
-                    +'</td>'
-                    +'<td>'
-                        +'<small><strong>Video 480</strong></small>'
-                        +'<input type="file" class="form-control-file" name="video_480[]" id="video_480_'+materis+'">'
-                        +'<small class="text-danger">Extension Video Only MP4</small>'
-                    +'</td>'
-                    +'<td>'
-                        +'<small><strong>Video 720</strong></small>'
-                        +'<input type="file" class="form-control-file" name="video_720[]" id="video_720_'+materis+'">'
-                        +'<small class="text-danger">Extension Video Only MP4</small>'
-                    +'</td>'
-                    +'<td>'
-                        +'<a class="del-add-materies btn btn-sm"><i class="fas fa-trash"></i></a>'
-                    +'</td>'
-                +'</tr>'
-            );
+            if(parseInt(materis) < 6){
+                $('#index_materies').val(parseInt(materis)+1);
+                $('#table_materies').append('<tr>'
+                        +'<td>'
+                           +'<small><strong>Name</strong></small>'
+                            +'<input type="text" class="form-control" name="name_materies[]" id="name_materies_'+materis+'" placeholder="Name Materies" required>'
+                        +'</td>'
+                        +'<td>'
+                            +'<small><strong>Video 480</strong></small>'
+                            +'<input type="file" class="form-control-file" name="video_480[]" id="video_480_'+materis+'">'
+                            +'<small class="text-danger">Extension Video Only MP4</small>'
+                        +'</td>'
+                        +'<td>'
+                            +'<small><strong>Video 720</strong></small>'
+                            +'<input type="file" class="form-control-file" name="video_720[]" id="video_720_'+materis+'">'
+                            +'<small class="text-danger">Extension Video Only MP4</small>'
+                        +'</td>'
+                        +'<td>'
+                            +'<a class="del-add-materies btn btn-sm"><i class="fas fa-trash"></i></a>'
+                        +'</td>'
+                    +'</tr>'
+                );
+            }else{
+                $('#addmateries').attr('disabled',true);
+            }
+          
         });
 
         $('.open-mdl').on('click',function(){
@@ -294,11 +297,10 @@
                 dataType: "json",
                 success: function (response) {
                     $('#view-materies').modal('show');
-                    console.log(response);
                     var content = '';
                     $.each(response.subclass.materies, function( index, value ) {
-                        content +=  '<tr>'
-                                    +'<td>'+(index+1)+'</td>'
+                        content +=  '<tr id="remove_'+value.idmateries+'">'
+                                    +'<td><a class="btn btn-xs"><i class="fas fa-trash" id="remove-materies" onclick="remove_materies('+response.subclass.idclass+','+value.idmateries+')"></i></a></td>'
                                     +'<td>'+value.name_materi+'</td>'
                                     +'<td><iframe src="{{ env('ADMINLTE3')}}class/video480/'+value.video480+'" frameborder="0"></iframe> </td>'
                                     +'<td><iframe src="{{ env('ADMINLTE3')}}class/video720/'+value.video720+'" frameborder="0"></iframe> </td>'

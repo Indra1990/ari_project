@@ -32,3 +32,5 @@ Route::post('class/detail/{class}/create-subclass', [ClassController::class, 'ad
 // materies
 Route::post('class/detail/{class}/create-materies', [ClassController::class, 'addmateries'])->middleware('check.auth');
 Route::get('class/detail/{class}/view-materies/{subcls}', [ClassController::class, 'viewmateries'])->middleware('check.auth');
+Route::delete('class/detail/{class}/delete-materies/{materies}', [ClassController::class, 'delete_materies'])->middleware('check.auth');
+

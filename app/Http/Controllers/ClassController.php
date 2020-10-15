@@ -174,14 +174,6 @@ class ClassController extends Controller
 
     public function viewmateries(Classes $class,SubClass $subcls)
     {   
-        // $subclass = SubClass::find($subcls->idsubclass);
-        // $class = Classes::with([
-        //     'subclass' => function($sub){
-        //         $sub->where('idsubclass',$subclass->idsubclass);
-        //     }
-        // ])
-        // ->where('idclass',$class->idclass)
-        // ->first();
         $subclass = SubClass::with([
                         'class_belong',
                         'materies'
@@ -189,10 +181,14 @@ class ClassController extends Controller
                     ->where('idsubclass',$subcls->idsubclass)
                     ->first();
 
-
-
         return response()->json(array('subclass'=> $subclass), 200);
+    }
 
+    public function delete_materies(Classes $class,Materies $materies)
+    {
+        $materies = Materies::find($materies->idmateries);
+        $materies->delete();
+        return response()->json(array('materies'=> $materies), 200);
 
     }
 }

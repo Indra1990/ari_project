@@ -7,6 +7,7 @@ use App\Models\Classes;
 use App\Models\SubClass;
 use App\Models\Materies;
 use Illuminate\Support\Str;
+use File;
 
 class ClassController extends Controller
 {
@@ -187,6 +188,21 @@ class ClassController extends Controller
     public function delete_materies(Classes $class,Materies $materies)
     {
         $materies = Materies::find($materies->idmateries);
+
+        if (!empty($materies->video480)) {
+            $path_video480 = env('CDN_PATH').'class/video480/'.$materies->video480; 
+            if(File::exists($path_video480)){
+                File::delete($path_video480); 
+            }
+        }
+
+        if (!empty($materies->video720)) {
+            $path_video720 = env('CDN_PATH').'class/video720/'.$materies->video720; 
+            if(File::exists($path_video720)){
+                File::delete($path_video720); 
+            }
+        }
+
         $materies->delete();
         return response()->json(array('materies'=> $materies), 200);
 

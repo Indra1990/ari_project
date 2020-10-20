@@ -32,25 +32,30 @@
 
   <script>
   function remove_materies(idclass,idmateries){
-    var token = '{{ csrf_token() }}';
-    $.ajax(
-    {
-        url: "{{url('class/detail')}}/"+idclass+'/delete-materies/'+idmateries,
-        type: 'DELETE', // replaced from put
-        dataType: "JSON",
-        data: {
-            "id": idmateries ,
-            "_token" : token// method and token not needed in data
-        },
-        success: function (response)
-        {
-          $('#remove_'+idmateries).remove();
-            console.log(response); // see the reponse sent
-        },
-        error: function(xhr) {
-        console.log(xhr.responseText); 
-      }
-    }); 
+    if (confirm('Are you sure you want to delete this ?')) {
+      var token = '{{ csrf_token() }}';
+      $.ajax(
+      {
+          url: "{{url('class/detail')}}/"+idclass+'/delete-materies/'+idmateries,
+          type: 'DELETE', // replaced from put
+          dataType: "JSON",
+          data: {
+              "id": idmateries ,
+              "_token" : token// method and token not needed in data
+          },
+          success: function (response)
+          {
+            $('#remove_'+idmateries).remove();
+              console.log(response); // see the reponse sent
+          },
+          error: function(xhr) {
+          console.log(xhr.responseText); 
+        }
+      }); 
+    } else {
+      console.log('cancel');
+    }
     
   }    
   </script>
+

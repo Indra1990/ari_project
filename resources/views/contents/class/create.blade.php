@@ -23,6 +23,7 @@
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
+
         {{--  <div class="row">
             <div class="col-12">
                 <div>
@@ -36,6 +37,7 @@
           @csrf
           <div class="row">
               <div class="col-12">
+                @include('contents.allmessage')
                   <div class="card">
                       <div class="card-header">
                           <h3 class="card-title">

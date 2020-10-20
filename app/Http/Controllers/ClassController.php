@@ -58,9 +58,14 @@ class ClassController extends Controller
             'tutor' => 'required',
             'description' => 'required',
             'images' => 'required|file|mimes:jpg,jpeg,png|max:50000',
-            'demo' => 'required|file|mimes:mp4|max:100000',
+            'demo' => 'required|file|mimes:mp4',
         ]);
-        
+
+        $getsize = filesize($request->file('demo'));
+        if ($getsize > 31500000) {
+            return redirect()->back()->with('status_error','Demo video is too large');
+        }
+     
         if($request->hasFile('images')){
             $file = $request->file('images');
             $filename = time()."_".$file->getClientOriginalName();
